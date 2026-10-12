@@ -1,0 +1,16 @@
+{
+  "collector_arm/endeffector": "meshes/lrv_robotarm/lrv_arm_shapes/body_1_1.obj",
+  "collector_arm/bicep": "meshes/lrv_robotarm/lrv_arm_shapes/body_2_1.obj",
+  "collector_arm/base": "meshes/lrv_robotarm/lrv_arm_shapes/body_3_1.obj",
+  "collector_arm/shoulder": "meshes/lrv_robotarm/lrv_arm_shapes/body_4_1.obj",
+  "collector_arm/elbow": "meshes/lrv_robotarm/lrv_arm_shapes/body_5_1.obj",
+  "collector_arm/wrist": "meshes/lrv_robotarm/lrv_arm_shapes/body_6_1.obj",
+  "collector_arm/finger": "meshes/lrv_robotarm/lrv_arm_shapes/body_7_1.obj",
+  "builder_arm/builder_[0-9]+_endeffector": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_1_1.obj",
+  "builder_arm/builder_[0-9]+_bicep": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_2_1.obj",
+  "builder_arm/builder_[0-9]+_base": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_3_1.obj",
+  "builder_arm/builder_[0-9]+_shoulder": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_4_1.obj",
+  "builder_arm/builder_[0-9]+_elbow": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_5_1.obj",
+  "builder_arm/builder_[0-9]+_wrist": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_6_1.obj",
+  "builder_arm/builder_[0-9]+_finger": "meshes/m113_builder_arm/m113_builder_arm_shapes/body_7_1.obj"
+}
