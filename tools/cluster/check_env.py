@@ -5,7 +5,8 @@
 
 Verifies: bpy imports and reports its Cycles compute devices, Pillow/ffmpeg are
 present, the dataset's 15 ranks + static props are readable, the heightmap is
-staged, and every mesh the manifest names resolves to a file.
+staged, the look .blend and its textures are present, and every mesh the
+manifest names resolves to a file.
 Run it from the working directory. Exit code 0 = ready to render.
 """
 import os
@@ -89,6 +90,33 @@ staged = os.path.join(ROOT, "assets", "data", "terrain", name) if name else ""
 hm = staged if staged and os.path.exists(staged) else find_heightmap(meta)
 status("terrain heightmap", hm is not None,
        hm or f"missing -- expected assets/data/terrain/{name or '<name from rank_1_meta.json>'}")
+
+# ---- the look: materials/light/world .blend + the textures it names. Read the
+# paths from render_bird so that LUNAR_MANIP is honoured the same way.
+LOOK_TEXTURES = [
+    "MetalGalvanizedSteelWorn001_COL_2K_METALNESS.jpg",
+    "MetalGalvanizedSteelWorn001_METALNESS_2K_METALNESS.jpg",
+    "MetalGalvanizedSteelWorn001_NRM_2K_METALNESS.jpg",
+    "MetalGalvanizedSteelWorn001_ROUGHNESS_2K_METALNESS.jpg",
+    "moon_01_diff_4k.jpg", "moon_01_nor_gl_4k.exr", "moon_01_rough_4k.exr",
+    "Poliigon_PlasticMoldDryBlast_7495_AmbientOcclusion.jpg",
+    "Poliigon_PlasticMoldDryBlast_7495_BaseColor.jpg",
+    "Poliigon_PlasticMoldDryBlast_7495_Displacement.tiff",
+    "Poliigon_PlasticMoldDryBlast_7495_Normal.png",
+    "Poliigon_PlasticMoldDryBlast_7495_Roughness.jpg",
+    "Rock020_4K-JPG_AmbientOcclusion.jpg", "Rock020_4K-JPG_Color.jpg",
+    "Rock020_4K-JPG_Displacement.jpg", "Rock020_4K-JPG_NormalGL.jpg",
+    "Rock020_4K-JPG_Roughness.jpg", "terrain2_full.png",
+]
+if bpy is not None:
+    import render_bird  # noqa: E402
+
+    look_blend, tex_dir = render_bird.SECTION2_MODE2, render_bird.TEXTURES_DIR
+    status("look .blend", os.path.exists(look_blend), look_blend)
+    tex_missing = [t for t in LOOK_TEXTURES if not os.path.exists(os.path.join(tex_dir, t))]
+    status("look textures", not tex_missing,
+           f"{len(LOOK_TEXTURES)} found in {tex_dir}" if not tex_missing else
+           f"{len(tex_missing)} missing in {tex_dir} ({', '.join(tex_missing[:4])})")
 
 # ---- meshes. resolve_mesh() returns a mesh-map entry without checking that it
 # exists, and an unresolved mesh is drawn as a box of the recorded aabb -- which

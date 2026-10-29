@@ -52,11 +52,20 @@ sys.path.insert(0, HERE)
 import render_site_frame as site  # noqa: E402
 import scm_terrain  # noqa: E402
 
-# The PBR materials, the key light and the world come from the lunar-manip repo.
-# Set LUNAR_MANIP if your copy is not at ~/lunar-manip.
-LUNAR_MANIP = os.path.expanduser(os.environ.get("LUNAR_MANIP", "~/lunar-manip"))
-SECTION2_MODE2 = os.path.join(LUNAR_MANIP, "data", "section2_mode2.blend")
-TEXTURES_DIR = os.path.join(LUNAR_MANIP, "data", "textures")
+# The PBR materials, the key light and the world. data/render_look/look.blend
+# holds just those datablocks, cut out of lunar-manip's section2_mode2.blend,
+# plus the 18 textures they use. realpath, not abspath: the working directory
+# links tools/ to the repo, and its own data/ is the recording.
+# Set LUNAR_MANIP to take them from a lunar-manip checkout instead.
+if os.environ.get("LUNAR_MANIP"):
+    LUNAR_MANIP = os.path.expanduser(os.environ["LUNAR_MANIP"])
+    SECTION2_MODE2 = os.path.join(LUNAR_MANIP, "data", "section2_mode2.blend")
+    TEXTURES_DIR = os.path.join(LUNAR_MANIP, "data", "textures")
+else:
+    LOOK_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+                            "data", "render_look")
+    SECTION2_MODE2 = os.path.join(LOOK_DIR, "look.blend")
+    TEXTURES_DIR = os.path.join(LOOK_DIR, "textures")
 
 TERRAIN_MAT_NAME = "terrain2_full.png_detail.001"
 PLASTIC_MAT_NAME = "M113_TrackShoeLeft_shoe_M113_TrackShoeRight_shoe_pbr"
@@ -299,7 +308,7 @@ def patch_light_and_world():
         data_to.objects = [o for o in data_from.objects if o == LIGHT_OBJ_NAME]
     new_light = data_to.objects[0]
     bpy.context.scene.collection.objects.link(new_light)
-    log(f"light {new_light.name!r} from section2_mode2.blend (energy {new_light.data.energy})")
+    log(f"light {new_light.name!r} from {os.path.basename(SECTION2_MODE2)} (energy {new_light.data.energy})")
 
     with bpy.data.libraries.load(SECTION2_MODE2, link=False) as (data_from, data_to):
         data_to.worlds = [w for w in data_from.worlds if w == WORLD_NAME]

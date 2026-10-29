@@ -34,12 +34,21 @@ already in `data/` of this repository. Section 3 tells you how to use them.
 2. A recording directory with 15 ranks. Each rank has `rank_N_frames.bin`,
    `rank_N_objects.jsonl`, `rank_N_meta.json` and `rank_N_scm.bin`, plus one
    `static_props.jsonl`.
-3. The lunar-manip assets at `~/lunar-manip/data` on euler. The look comes from
-   `section2_mode2.blend` and the `textures` directory. If your copy is at a
-   different place, set the `LUNAR_MANIP` environment variable.
-4. The three rock meshes `rock1.obj`, `rock2.obj` and `rock3.obj` from the Chrono
-   data directory `data/robot/curiosity/rocks/`. This repository does not have them.
-5. A conda environment. Section 2.1 makes it.
+3. A conda environment. Section 2.1 makes it.
+
+The repository has all the assets:
+
+| Asset | Place in the repository |
+|---|---|
+| Vehicle and arm meshes | `data/vehicle`, `data/lrv_robotarm`, `data/m113_builder_arm` |
+| Rock meshes `rock1.obj`, `rock2.obj`, `rock3.obj` | `data/rocks` |
+| Heightmap | `data/terrain` |
+| Materials, key light and world (the "look") | `data/render_look/look.blend` |
+| The 18 textures that the look uses | `data/render_look/textures` |
+
+`look.blend` (97 KB) holds only the 4 materials, the light `Light.001` and the
+`World` of the lunar-manip file `section2_mode2.blend` (132 MB). The look is the
+same. To use a lunar-manip checkout, set the `LUNAR_MANIP` environment variable.
 
 ### 2.1 Make the conda environment
 
@@ -68,7 +77,6 @@ working directory for each recording.
 
 ```bash
 REPO=~/amd-synchrono          # this branch, cloned on euler
-CHRONO=~/chrono/build/data    # your Chrono data directory, for the rocks
 WORK=~/render-run-NAME        # one directory for each recording
 
 mkdir -p $WORK/renders $WORK/meshes $WORK/assets/data
@@ -84,7 +92,7 @@ ln -s /path/to/the/recording data
 # the meshes. meshes/ must be one real directory tree.
 # os.walk does not go into a symbolic link of a subdirectory
 cp -r $REPO/data/vehicle $REPO/data/lrv_robotarm $REPO/data/m113_builder_arm meshes/
-cp $CHRONO/robot/curiosity/rocks/rock[123].obj meshes/
+cp $REPO/data/rocks/rock[123].obj meshes/
 
 # the heightmap. The name comes from rank_1_meta.json
 ln -s $REPO/data/terrain assets/data/terrain
